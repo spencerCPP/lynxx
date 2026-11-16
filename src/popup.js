@@ -309,5 +309,23 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// Show the fill shortcut the user actually has: it's Control+Shift+F on
+// Mac (Option+Shift+F types "Ï" there), and people can change it in the
+// browser's shortcut settings.
+function showFillShortcut() {
+  chrome.commands.getAll((commands) => {
+    const fill = commands.find((c) => c.name === "fill-form");
+    const kbd = $("#fill-shortcut");
+    if (fill?.shortcut) {
+      kbd.textContent = fill.shortcut;
+      $("#fill").title = `Fill matching fields on this page (${fill.shortcut})`;
+    } else {
+      kbd.textContent = "no shortcut set";
+      $("#fill").title = "Fill matching fields on this page";
+    }
+  });
+}
+
 load();
 updateBoardLink();
+showFillShortcut();
